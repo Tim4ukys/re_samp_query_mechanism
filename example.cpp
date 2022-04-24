@@ -1,9 +1,6 @@
 ﻿#include <iostream>
-#include <boost/asio.hpp>
-#include <cstring>
-#include <sstream>
-#include <memory.h>
 #include <random>
+#include <ctime>
 
 #include "SQM.h"
 
@@ -47,10 +44,10 @@ int main(int argc, char* argv[])
 
 	std::cout << "----- PING -----" << std::endl;
 	int rand = randomInteger(INT_MIN, INT_MAX);
-	UINT64 tick = GetTickCount64();
+	time_t tick = time(nullptr);
 	sm.sendRequest(SQM::eRequestType::SERVERPING, &rand, 4);
 	sm.receive<SQM::stServerPing>();
-	tick = GetTickCount64() - tick;
+	tick = time(nullptr) - tick;
 	std::cout << "Ping: " << (int)tick << std::endl;
 
 

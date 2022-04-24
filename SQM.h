@@ -22,8 +22,8 @@ public:
 
 	struct stServerInfo {
 		bool m_bIsLocked;
-		uint16_t m_nPlayers;
-		uint16_t m_nMaxPlayers;
+		std::uint16_t m_nPlayers;
+		std::uint16_t m_nMaxPlayers;
 		std::string m_sHostName;
 		std::string m_sGameMode;
 		std::string m_sLanguage;
@@ -59,22 +59,22 @@ private:
 	std::unique_ptr<t_udp::resolver> resolver;
 	std::unique_ptr<t_udp::socket> socket;
 
-	inline void translateIP(const std::string& ip, BYTE outByteIP[4]);
+	inline void translateIP(const std::string& ip, unsigned char outByteIP[4]);
 
 	template<typename T>
-	void read(LPBYTE& read_buff, T& out)
+	void read(char*& read_buff, T& out)
 	{
-		memcpy(PVOID(&out), read_buff, sizeof(T));
+		memcpy((void*)(&out), read_buff, sizeof(T));
 		read_buff += sizeof(T);
 	}
 	template<typename lenStrType>
-	void readStr(LPBYTE& read_buff, std::string& out)
+	void readStr(char*& read_buff, std::string& out)
 	{
 		lenStrType len;
 		read<lenStrType>(read_buff, len);
 
 		out.resize(std::size_t(len));
-		memcpy(PVOID(out.data()), read_buff, std::size_t(len));
+		memcpy((void*)(out.data()), read_buff, std::size_t(len));
 		read_buff += size_t(len);
 	}
 
@@ -86,7 +86,7 @@ public:
 		const size_t BUFF_LEN = 2048;
 		char buff[BUFF_LEN];
 		socket->receive(boost::asio::buffer(buff, BUFF_LEN));
-		auto cursorRead = (LPBYTE)buff;
+		auto cursorRead = (char*)buff;
 
 		cursorRead += 11;
 		if constexpr (std::is_same_v<T, stServerInfo>) {
@@ -134,6 +134,6 @@ public:
 
 protected:
 
-	BYTE m_arrIP[4]; // 255.255.255.255
-	USHORT m_uPort; // 7777
+	unsigned char m_arrIP[4]; // 255.255.255.255
+	unsigned short m_uPort; // 7777
 };

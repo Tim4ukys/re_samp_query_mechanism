@@ -21,7 +21,7 @@ void SQM::sendRequest(const eRequestType tp, void* data, size_t lenData) {
 	std::string sendData;
 	sendData.resize(11 + lenData);
 
-	LPBYTE pSndData = (PBYTE)sendData.data();
+	char* pSndData = (char*)sendData.data();
 	memcpy(pSndData, "SAMP", 4);
 	memcpy(pSndData + 4, m_arrIP, 4);
 	memcpy(pSndData + 8, &m_uPort, 2);
@@ -33,13 +33,13 @@ void SQM::sendRequest(const eRequestType tp, void* data, size_t lenData) {
 	socket->send(boost::asio::buffer(sendData));
 }
 
-inline void SQM::translateIP(const std::string& ip, BYTE outByteIP[4])
+inline void SQM::translateIP(const std::string& ip, unsigned char outByteIP[4])
 {
 	std::stringstream sstream{ ip };
 
 	for (size_t i{}; i < 4; ++i) {
 		std::string temp;
 		std::getline(sstream, temp, '.');
-		outByteIP[i] = (BYTE)strtol(temp.c_str(), nullptr, 10);
+		outByteIP[i] = (unsigned char)strtol(temp.c_str(), nullptr, 10);
 	}
 }
