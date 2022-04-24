@@ -7,6 +7,7 @@
 
 #include "SQM.h"
 
+// https://www.blast.hk/threads/781/post-128505
 int randomInteger(int min, int max)
 {
 	static std::random_device rd;
